@@ -3,7 +3,8 @@ const router = express.Router();
 const gravatar = require("gravatar");
 const bcrypt = require("bcryptjs");
 const keys = require("../../config/keys");
-
+const jwt = require("jsonwebtoken");
+const key = require("../../config/keys").secretOrKey;
 // Load User model
 const User = require("../../models/user");
 
@@ -74,9 +75,23 @@ router.post("/login", (req, res) => {
       bcrypt.compare(req.body.password, pwHash).then(isMatch => {
         // res == true
         if (isMatch) {
-          return res.json({
-            response: "Welcome " + req.body.name
+          // session setzen
+          const payload = {
+            id: user.id,
+            name: user.name,
+            avatar: user.avatar
+          };
+
+          jwt.sign(payload, key, { expiresIn: 3600 }, (err, token) => {
+            res.json({
+              success: true,
+              token: "Bearer " + token // Beare
+            });
           });
+
+          // return res.json({
+          //   response: "Welcome " + req.body.name
+          // });
         } else {
           return res.json({ response: "Password incorrect!" });
         }
@@ -84,18 +99,6 @@ router.post("/login", (req, res) => {
     } else {
       return res.status(400).json({
         email: "User not found!"
-      });
-
-      const avatar = gravatar.url(req.body.email, {
-        s: "200", // size
-        r: "pg", // rating
-        d: "mm" // default
-      });
-      const newUser = new User({
-        name: req.body.name, // Kommt von der react form
-        email: req.body.email,
-        avatar: avatar,
-        password: req.body.password
       });
     }
   });
