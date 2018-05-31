@@ -9,12 +9,12 @@ const profile = require("./routes/api/profile");
 const app = express();
 
 // Body parser middleware
-app.user(
+app.use(
   bodyParser.urlencoded({
     extended: false
   })
 );
-app.user(bodyParser.json());
+app.use(bodyParser.json());
 
 // DB config
 const db = require("./config/keys").mongoURI;

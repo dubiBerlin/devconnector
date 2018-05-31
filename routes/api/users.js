@@ -1,9 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const gravatar = require("gravatar");
+const bcrypt = require("bcryptjs");
+const keys = require("../../config/keys");
 
 // Load User model
-const User = require("../models/user");
+const User = require("../../models/user");
 
 // @route  GET api/users/test
 // @desc   Tests users route
@@ -39,8 +41,63 @@ router.post("/register", (req, res) => {
         avatar: avatar,
         password: req.body.password
       });
+
+      bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(newUser.password, salt, (err, hash) => {
+          if (err) throw err;
+          newUser.password = hash;
+
+          newUser
+            .save() // save() ist mongose Funktion die in DB speichert
+            .then(user => {
+              res.json(user);
+            })
+            .catch(err => console.log(err));
+        });
+      });
     }
   });
 });
 
+// @route  GET api/users/login
+// @desc   login user
+// @access Public
+router.post("/login", (req, res) => {
+  // findOne ist eine mongoose Methode die ja schon im User objekt
+  // injiziert ist. Schaut nach einem Datensatz der im body der Methode definiert ist.
+  User.findOne({
+    email: req.body.email
+  }).then(user => {
+    if (user) {
+      var pwHash = user.password;
+
+      bcrypt.compare(req.body.password, pwHash).then(isMatch => {
+        // res == true
+        if (isMatch) {
+          return res.json({
+            response: "Welcome " + req.body.name
+          });
+        } else {
+          return res.json({ response: "Password incorrect!" });
+        }
+      });
+    } else {
+      return res.status(400).json({
+        email: "User not found!"
+      });
+
+      const avatar = gravatar.url(req.body.email, {
+        s: "200", // size
+        r: "pg", // rating
+        d: "mm" // default
+      });
+      const newUser = new User({
+        name: req.body.name, // Kommt von der react form
+        email: req.body.email,
+        avatar: avatar,
+        password: req.body.password
+      });
+    }
+  });
+});
 module.exports = router;
