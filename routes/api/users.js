@@ -7,6 +7,7 @@ const jwt = require("jsonwebtoken");
 const key = require("../../config/keys").secretOrKey;
 // Load User model
 const User = require("../../models/user");
+const passport = require("passport");
 
 // @route  GET api/users/test
 // @desc   Tests users route
@@ -88,10 +89,6 @@ router.post("/login", (req, res) => {
               token: "Bearer " + token // Beare
             });
           });
-
-          // return res.json({
-          //   response: "Welcome " + req.body.name
-          // });
         } else {
           return res.json({ response: "Password incorrect!" });
         }
@@ -103,4 +100,15 @@ router.post("/login", (req, res) => {
     }
   });
 });
+
+// @route  GET api/users/current
+// @desc   Return current user
+// @access private
+router.get(
+  "/current",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    res.json(req.user);
+  }
+);
 module.exports = router;
