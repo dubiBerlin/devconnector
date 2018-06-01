@@ -9,6 +9,9 @@ const key = require("../../config/keys").secretOrKey;
 const User = require("../../models/user");
 const passport = require("passport");
 
+// Load input validation
+const validateRegisterInput = require("../../validation/register"); // importiert die Funktion die in der register.js zurückgegeben wird
+
 // @route  GET api/users/test
 // @desc   Tests users route
 // @access Public
@@ -22,14 +25,22 @@ router.get("/test", (req, res) => {
 // @desc   Register user
 // @access Public
 router.post("/register", (req, res) => {
+  // user input Validierung
+  const { errors, isValid } = validateRegisterInput(req.body);
+
+  if (!isValid) {
+    return res.status(400).json(errors); // error ist definiert in der register.js
+  }
+
   // findOne ist eine mongoose Methode die ja schon im User objekt
   // injiziert ist. Schaut nach einem Datensatz der im body der Methode definiert ist.
   User.findOne({
     email: req.body.email
   }).then(user => {
     if (user) {
+      errors.email = "Email already exist";
       return res.status(400).json({
-        email: "Email already exist"
+        errors
       });
     } else {
       const avatar = gravatar.url(req.body.email, {
@@ -108,7 +119,8 @@ router.get(
   "/current",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    res.json(req.user);
+    console.log("athentication");
+    res.json({ id: req.user.id, name: req.user.name });
   }
 );
 module.exports = router;
