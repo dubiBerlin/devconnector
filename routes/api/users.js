@@ -76,6 +76,12 @@ router.post("/register", (req, res) => {
 // @desc   login user
 // @access Public
 router.post("/login", (req, res) => {
+  const { errors, isValid } = validateLoginInput(req.body);
+
+  if (!isValid) {
+    return res.status(400).json(errors); // error ist definiert in der register.js
+  }
+
   // findOne ist eine mongoose Methode die ja schon im User objekt
   // injiziert ist. Schaut nach einem Datensatz der im body der Methode definiert ist.
   User.findOne({
@@ -101,12 +107,14 @@ router.post("/login", (req, res) => {
             });
           });
         } else {
-          return res.json({ response: "Password incorrect!" });
+          errors.password = "Password incorrect!";
+          return res.json(errors);
         }
       });
     } else {
+      errors.email = "Email not found!";
       return res.status(400).json({
-        email: "User not found!"
+        errors
       });
     }
   });
