@@ -8,6 +8,7 @@ const ProfileSchema = new Schema({
     ref: "users"
   },
   handle: {
+    //URL
     type: String,
     required: true,
     max: 40
@@ -110,7 +111,7 @@ const ProfileSchema = new Schema({
     linkedin: {
       type: String
     },
-    instaggram: {
+    instagram: {
       type: String
     }
   }
