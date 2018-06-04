@@ -11,6 +11,7 @@ const passport = require("passport");
 
 // Load input validation
 const validateRegisterInput = require("../../validation/register"); // importiert die Funktion die in der register.js zurückgegeben wird
+const validateLoginInput = require("../../validation/login");
 
 // @route  GET api/users/test
 // @desc   Tests users route

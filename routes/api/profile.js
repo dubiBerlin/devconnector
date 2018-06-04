@@ -3,6 +3,9 @@ const router = express.Router();
 const mongoose = require("mongoose");
 const passport = require("passport");
 
+// load validation
+const validateProfileInput = require("../../validation/profile");
+
 // Load profile model
 const Profile = require("../../models/profile");
 
@@ -22,7 +25,7 @@ router.get("/test", (req, res) => {
 // @desc   Get current users profile
 // @access Private
 router.get(
-  "/profile",
+  "/",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     const errors = {};
@@ -30,6 +33,7 @@ router.get(
     Profile.findOne({
       user: req.user.id
     })
+      .populate("user", ["name", "avatar"]) // erstellt user objekt im profil welches zurück gegeben wird
       .then(profile => {
         if (!Profile) {
           errors.noprofile = "There is no profile for this user";
@@ -49,6 +53,9 @@ router.post(
   "/createprofile",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
+    console.log(req.body);
+    const { errors, isValid } = validateProfileInput(req.body);
+
     //Get fields
     const profileFields = {};
     profileFields.user = req.user.id; // die ID des eingeloggten Users
@@ -74,6 +81,11 @@ router.post(
     if (req.body.twitter) profileFields.twitter = req.body.twitter;
     if (req.body.linkedin) profileFields.linkedin = req.body.linkedin;
     if (req.body.instagram) profileFields.instagram = req.body.instagram;
+
+    if (!isValid) {
+      // return errors
+      return res.status(400).json(errors);
+    }
 
     Profile.findOne({ user: req.user.id }).then(profile => {
       if (profile) {
@@ -102,6 +114,98 @@ router.post(
           });
         });
       }
+    });
+  }
+);
+
+// @route  POST api/profile/handle/:handle
+// @desc   Get profile by handle
+// @access public
+router.get("/handle/:handle", (req, res) => {
+  const errors = {};
+
+  Profile.findOne({
+    handle: req.params.handle
+  })
+    .populate("user", ["name", "avatar"])
+    .then(profile => {
+      // gibt das Profil zurück aus der DB
+      if (!profile) {
+        errors.noprofile = "There is no profile for this user!";
+
+        res.status(404).json(errors); // 404 für not found
+      }
+      res.json(profile);
+    })
+    .catch(err => res.status(400).json(err));
+});
+
+// @route  POST api/profile/handle/:handle
+// @desc   Get profile by handle
+// @access public
+router.get("/user/:user_id", (req, res) => {
+  const errors = {};
+
+  Profile.findOne({
+    id: req.params.user_id
+  })
+    .populate("user", ["name", "avatar"])
+    .then(profile => {
+      // gibt das Profil zurück aus der DB
+      if (!profile) {
+        errors.noprofile = "There is no profile for this user!";
+
+        res.status(404).json(errors); // 404 für not found
+      }
+      res.json(profile);
+    })
+    .catch(err => res.status(400).json(err));
+});
+
+// @route  POST api/profile/handle/:handle
+// @desc   Get profile by handle
+// @access public
+router.get("/all", (req, res) => {
+  const errors = {};
+
+  Profile.find()
+    .populate("user", ["name", "avatar"])
+    .then(profiles => {
+      // gibt das Profil zurück aus der DB
+      if (!profiles) {
+        errors.noprofile = "There are no profiles";
+        res.status(404).json(errors); // 404 für not found
+      }
+      res.json(profiles);
+    })
+    .catch(err => res.status(400).json({ profile: "There are no profiles" }));
+});
+
+// @route  POST api/profile/experience
+// @desc   Add experience to profile
+// @access Private
+router.post(
+  "/experience/",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    const { errors, isValid } = validateProfileInput(req.body);
+
+    // sucht das Profil anhand der UserId
+    Profile.findOne({ user: req.user.id }).then(profile => {
+      const newExp = {
+        title: req.body.title,
+        company: req.body.company,
+        location: req.body.location,
+        from: req.body.from,
+        to: req.body.to,
+        current: req.body.current,
+        description: req.body.description
+      };
+
+      // Add to exp array
+      profile.experience.unshift(newExp);
+
+      profile.save().then(profile => res.json(profile));
     });
   }
 );
