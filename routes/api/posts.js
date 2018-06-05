@@ -92,28 +92,56 @@ router.delete(
 );
 
 // @route  POST api/posts/like/:id
-// @desc   Get post by id
+// @desc   Like a post
 // @access private
-router.delete(
-  "/:id",
+router.post(
+  "/like/:id",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    const id = req.params.id; //id aus url auslesen
-
-    //
     Profile.findOne({
       user: req.user.id
     }).then(profile => {
       Post.findById(req.params.id)
         .then(post => {
-          if (post.user.toString() !== req.user.id) {
-            return res
-              .status(401)
-              .json({ notauthorized: "User not authorized" });
+          if (post.likes.filter(like => like.user.toString() === req.user.id).length > 0) {
+            return res.status(400).json({ alreadyliked: "User already liked this post" });
           }
 
-          // delete
-          post.remove().then(() => res.json({ success: true }));
+          // Add user id to likes array
+          post.likes.unshift({ user: req.user.id });
+
+          // Post wieder speichern
+          post.save().then(post => res.json(post));
+        })
+        .catch(err => res.status(404).json({ postnotfound: "No post found!" }));
+    });
+  }
+);
+
+// @route  POST api/posts/unlike/:id
+// @desc   Like a post
+// @access private
+router.post(
+  "/unlike/:id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Profile.findOne({
+      user: req.user.id
+    }).then(profile => {
+      Post.findById(req.params.id)
+        .then(post => {
+          if (post.likes.filter(like => like.user.toString() === req.user.id).length === 0) {
+            return res.status(400).json({ notliked: "You have not liked this post" });
+          }
+
+          // Get remove index
+          const removeindex = post.likes.map(item => item.user.toString()).indexOf(req.user.id);
+
+          // Splice out of array
+          post.likes.splice(removeindex, 1);
+
+          // Post wieder speichern
+          post.save().then(post => res.json(post));
         })
         .catch(err => res.status(404).json({ postnotfound: "No post found!" }));
     });
