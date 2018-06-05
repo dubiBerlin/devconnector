@@ -18,7 +18,7 @@ router.get("/test", (req, res) => {
 
 // @route  GET api/posts/test
 // @desc   Tests post route
-// @access Public
+// @access private
 router.post(
   "/",
   passport.authenticate("jwt", { session: false }),
@@ -40,4 +40,14 @@ router.post(
   }
 );
 
+// @route  GET api/posts/test
+// @desc   Tests post route
+// @access Public
+router.get("/posts", (req, res) => {
+  var posts = {};
+  Post.find() // finde alle posts
+    .sort({ date: -1 }) // sortiere sie nach dem datum
+    .then(posts => res.json(posts)) // gebe die posts als json zurück
+    .catch(err => res.status(404));
+});
 module.exports = router;
