@@ -148,6 +148,9 @@ router.post(
   }
 );
 
+// @route  POST api/posts/unlike/:id
+// @desc   Like a post
+// @access private
 router.post("/comment/:id", passport.authenticate("jwt", { session: false }), (req, res) => {
   Post.findById(req.params.id) // Post über die Id finden die über die url gesendet wird
     .then(post => {
@@ -164,8 +167,30 @@ router.post("/comment/:id", passport.authenticate("jwt", { session: false }), (r
       // save the post again
       post.save().then(post => res.json(post));
 
-    });
+    }).catch(err => res.status(404).json({ postnotfound: "No post found" }));
 });
 
+
+// @route  DELETE api/posts/unlike/:id/:comment_id
+// @desc   Remove comment from post
+// @access private
+router.delete("/comment/:id/:comment_id", passport.authenticate("jwt", { session: false }), (req, res) => {
+  Post.findById(req.params.id) // Post über die Id finden die über die url gesendet wird
+    .then(post => {
+
+      if (post.comments.filter(comment => comment_id.toString() === req.params.comment_id).length === 0) {
+        return res.status(404).json({ commentnotexist: "Comment does not exist" });
+      }
+      // get the index in the comments-array of the post
+      const removeIndex = post.comments.map(item => item._id.toString()).indexOf(req.params.comment_id);
+
+      // remove this comment
+      post.comments.splice(removeIndex, 1);
+
+      // save the post again
+      post.save().then(post => res.json(post));
+
+    }).catch(err => res.status(404).json({ postnotfound: "No post found" }));
+});
 
 module.exports = router;
