@@ -148,4 +148,24 @@ router.post(
   }
 );
 
+router.post("/comment/:id", passport.authenticate("jwt", { session: false }), (req, res) => {
+  Post.findById(req.params.id) // Post über die Id finden die über die url gesendet wird
+    .then(post => {
+      const newComment = {
+        text: req.body.text,
+        name: req.body.name,
+        avatar: req.body.avatar,
+        user: req.user.id
+      }
+
+      // Add comments into the array of comments of the post
+      post.comments.unshift(newComment);
+
+      // save the post again
+      post.save().then(post => res.json(post));
+
+    });
+});
+
+
 module.exports = router;
