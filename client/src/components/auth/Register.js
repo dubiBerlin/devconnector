@@ -4,6 +4,7 @@ import axios from "axios";
 import classnames from "classnames";
 import { connect } from "react-redux";
 import { registerUser } from "../../actions/authAction";
+import { withRouter } from "react-router-dom";
 
 class Register extends Component {
 
@@ -46,7 +47,7 @@ class Register extends Component {
         }
 
 
-        this.props.registerUser(newUser);
+        this.props.registerUser(newUser, this.props.history);
     }
 
     render() {
@@ -105,4 +106,5 @@ const mapStateToProps = (state) => ({
 // connect: bindet die Action an die Komponente
 // {registerUser} ist die Aktion aus der Datei authAction
 // mapStateToProps = die Methode die den state an die props bindet
-export default connect(mapStateToProps, { registerUser })(Register);
+// withRouter die Navigation wird an die Komponente gebunden
+export default connect(mapStateToProps, { registerUser })(withRouter(Register));
