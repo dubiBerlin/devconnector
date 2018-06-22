@@ -5,6 +5,14 @@ import { connect } from "react-redux";
 import { logoutUser } from "../../actions/authAction";
 
 class Navbar extends React.Component {
+
+
+    onLogoutClick(event) {
+        event.preventDefault();
+        this.props.logoutUser();
+    }
+
+
     render() {
 
         const { isAuthenticated, user } = this.props.auth;
@@ -12,7 +20,7 @@ class Navbar extends React.Component {
         const authLinks = (
             <ul className="navbar-nav ml-auto">
                 <li className="nav-item">
-                    <a href="#" className="nav-link"></a>
+                    <a href="#" onclick={this.onLogoutClick.bind(this)} className="nav-link"></a>
                 </li>
             </ul>
         );
@@ -42,7 +50,8 @@ class Navbar extends React.Component {
                                 <Link className="nav-link" to="/profiles">{' '} Developers</Link>
                             </li>
                         </ul>
-
+                        {/* Wenn user eingeloggt ist, dann authLinks anzeigen sonst guestLinks */}
+                        {isAuthenticated ? authLinks : guestLinks}
 
                     </div>
                 </div>
