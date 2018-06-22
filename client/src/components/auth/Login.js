@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 import axios from "axios";
 import classnames from "classnames";
 import { connect } from "react-redux";
@@ -26,7 +25,6 @@ class Login extends Component {
     componentWillReceiveProps(nextProps) {
         console.log(nextProps);
         if (nextProps.errors) {
-            console.log("haha");
             this.setState({
                 errors: nextProps.errors
             });
