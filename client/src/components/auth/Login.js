@@ -21,6 +21,18 @@ class Login extends Component {
         this.onSubmit = this.onSubmit.bind(this); // man bindet die onchange Methode an den state. somit wird "this.setState" erkannt
     }
 
+    /*
+     * componentDidMount()
+     * Nachdem die Komponente gebaut wurde, wird ddiese Methode aufgerufen
+     * Der Code wird nach dem erstellen der Komponente ausgeführt
+     * 
+     * Aufgabe der Methode:
+     *  Wenn der User eingeloggt ist, soll sofort zur Dashbord Seite hinnavigiert werden */
+    componentDidMount() {
+        if (this.props.auth.isAuthenticated) {
+            this.props.history.push("/dashboard")
+        }
+    }
 
     componentWillReceiveProps(nextProps) {
         console.log(nextProps);
