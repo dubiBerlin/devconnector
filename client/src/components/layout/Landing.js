@@ -1,7 +1,24 @@
 import React from "react";
 import { Link } from "react-router-dom"
+import { PropTypes } from "prop-types";
+import { connect } from "react-redux";
 
 class Landing extends React.Component {
+
+    /*
+    * componentDidMount()
+    * Nachdem die Komponente gebaut wurde, wird ddiese Methode aufgerufen
+    * Der Code wird nach dem erstellen der Komponente ausgeführt
+    * 
+    * Aufgabe der Methode:
+    *  Wenn der User eingeloggt ist, soll sofort zur Dashbord Seite hinnavigiert werden */
+    componentDidMount() {
+        if (this.props.auth.isAuthenticated) {
+            this.props.history.push("/dashboard")
+        }
+    }
+
+
     render() {
         return (
             <div className="landing">
@@ -23,5 +40,12 @@ class Landing extends React.Component {
     }
 }
 
+Landing.propTypes = {
+    auth: PropTypes.object.isRequired
+}
 
-export default Landing;
+const mapStateToProps = (state) => ({
+    auth: state.auth
+});
+
+export default connect(mapStateToProps)(Landing);

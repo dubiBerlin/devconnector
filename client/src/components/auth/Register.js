@@ -47,6 +47,19 @@ class Register extends Component {
         this.props.registerUser(newUser, this.props.history);
     }
 
+    /*
+    * componentDidMount()
+    * Nachdem die Komponente gebaut wurde, wird ddiese Methode aufgerufen
+    * Der Code wird nach dem erstellen der Komponente ausgeführt
+    * 
+    * Aufgabe der Methode:
+    *  Wenn der User eingeloggt ist, soll sofort zur Dashbord Seite hinnavigiert werden */
+    componentDidMount() {
+        if (this.props.auth.isAuthenticated) {
+            this.props.history.push("/dashboard")
+        }
+    }
+
     render() {
 
         const errors = this.state.errors;
@@ -87,6 +100,8 @@ class Register extends Component {
         )
     }
 }
+
+
 
 Register.propTypes = {
     registerUser: PropTypes.func.isRequired,
