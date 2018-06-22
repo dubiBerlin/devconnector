@@ -37,7 +37,6 @@ export const loginUser = function (userData, history) {
                 const decoded = jwt_decode(token);
                 // den jetzigen User setzen
                 dispatch(setCurrentUser(decoded));
-                history.push("/login")
             })
             .catch(err =>
                 dispatch({
@@ -56,3 +55,5 @@ export const setCurrentUser = (decoded) => {
         payload: decoded
     }
 }
+
+

@@ -45,8 +45,6 @@ class Register extends Component {
             password: this.state.password,
             password2: this.state.password2
         }
-
-
         this.props.registerUser(newUser, this.props.history);
     }
 
@@ -104,7 +102,7 @@ const mapStateToProps = (state) => ({
 });
 
 // connect: bindet die Action an die Komponente
-// {registerUser} ist die Aktion aus der Datei authAction
+// {registerUser} ist die Funktion/Aktion aus der Datei authAction
 // mapStateToProps = die Methode die den state an die props bindet
 // withRouter die Navigation wird an die Komponente gebunden
 export default connect(mapStateToProps, { registerUser })(withRouter(Register));
