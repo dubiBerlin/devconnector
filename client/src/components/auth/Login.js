@@ -1,9 +1,6 @@
 import React, { Component } from "react";
-import axios from "axios";
-import classnames from "classnames";
 import { connect } from "react-redux";
 import { loginUser } from "../../actions/authAction";
-import { withRouter } from "react-router-dom";
 import TextFieldGroup from "../common/TextFieldGroup";
 
 class Login extends Component {
