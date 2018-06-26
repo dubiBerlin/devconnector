@@ -10,20 +10,20 @@ import Footer from "./components/layout/Footer";
 import Landing from "./components/layout/Landing";
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
+import { logoutUser, setCurrentUser } from './actions/authActions';
+import { clearCurrentProfile } from './actions/profileActions';
 import Dashboard from "./components/dashboard/Dashboard";
-import { logoutUser } from './actions/authAction';
 import setAuthToken from "./utils/setAuthtoken";
 import jwt_decode from "jwt-decode";
-import { setCurrentUser } from "./actions/authAction";
 
 
 // Überprüfung ob token gesetzt wurde
-if (localStorage.jwtToken) {
-
+if (localStorage.getItem("jwtToken")) {
+  console.log("jwt_token: " + localStorage.jwtToken)
   // set the token in authorization-field in header 
   setAuthToken(localStorage.jwtToken);
   // decode the token to get user data
-  const decoded = jwt_decode(localStorage.jwtToken);
+  const decoded = "";//jwt_decode(localStorage.jwtToken);
   // set user and is authenticated
   store.dispatch(setCurrentUser(decoded));
 
@@ -33,7 +33,7 @@ if (localStorage.jwtToken) {
     // log the user out
     store.dispatch(logoutUser());
     // TODO: Clear current Profile
-    store.dispatch(setCurrentUser(decoded));
+    store.dispatch(clearCurrentProfile());
     // Redirect to login
     window.location.href = "/login";
   }

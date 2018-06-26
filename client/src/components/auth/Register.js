@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { registerUser } from "../../actions/authAction";
+import { registerUser } from "../../actions/authActions";
 import { withRouter } from "react-router-dom";
 import TextFieldGroup from "../common/TextFieldGroup";
 
@@ -64,6 +64,8 @@ class Register extends Component {
 
         const errors = this.state.errors;
         //const user = this.props.auth.user;
+
+        console.log(errors);
 
         return (
             <div className="register">

@@ -2,12 +2,12 @@ import {
     GET_PROFILE,
     PROFILE_LOADING,
     CLEAR_CURRENT_PROFILE
-} from "../actions/types";
+} from '../actions/types';
 
 const initialState = {
     profile: null,
-    profiles: null, // array of profiles
-    loading: false // solange Daten geholt werden, wird loading auf true gesetzt.
+    profiles: null,
+    loading: false
 };
 
 export default function (state = initialState, action) {
