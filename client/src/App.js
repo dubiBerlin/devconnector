@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Provider } from "react-redux"; // Provider ist der "Store" der alle states der verschiedenen Komponenten enthält
 import store from "./store";
+
+import PrivateRoute from "./components/common/PrivateRoute";
 
 //import logo from './logo.svg';
 import './App.css';
@@ -23,7 +25,7 @@ if (localStorage.getItem("jwtToken")) {
   // set the token in authorization-field in header 
   setAuthToken(localStorage.jwtToken);
   // decode the token to get user data
-  const decoded = "";//jwt_decode(localStorage.jwtToken);
+  const decoded = jwt_decode(localStorage.getItem("jwtToken"));
   // set user and is authenticated
   store.dispatch(setCurrentUser(decoded));
 
@@ -50,7 +52,9 @@ class App extends Component {
             <div className="container">
               <Route exact path="/register" component={Register} />
               <Route exact path="/login" component={Login} />
-              <Route exact path="/dashboard" component={Dashboard} />
+              <Switch>
+                <PrivateRoute exact path="/dashboard" component={Dashboard} />
+              </Switch>
             </div>
             <Footer />
           </div>

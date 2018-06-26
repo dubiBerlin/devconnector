@@ -27,6 +27,8 @@ export const loginUser = function (userData, history) {
     return function (dispatch) {
         axios.post("/api/users/login", userData)
             .then(res => {
+
+                console.log(res);
                 // den token in localStorage speichern
                 const token = res.data.token;
                 // 
@@ -41,7 +43,7 @@ export const loginUser = function (userData, history) {
             .catch(err =>
                 dispatch({
                     type: GET_ERRORS,
-                    payload: err.response.data
+                    payload: err
                 })
             );
     }
