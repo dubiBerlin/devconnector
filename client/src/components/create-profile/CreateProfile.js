@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import TextFieldGroup from "../common/TextFieldGroup";
+import TextAreaFieldGroup from "../common/TextAreaFieldGroup";
+import InputGroup from "../common/InputGroup";
+import SelectListGroup from "../common/SelectListGroup";
 
 class CreateProfile extends Component {
 
@@ -24,9 +27,28 @@ class CreateProfile extends Component {
             instagram: "",
             errors: ""
         }
+
+        this.onChange = this.onChange.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
+    }
+
+
+    onSubmit(e) {
+        e.preventDefault();
+        console.log("Submit");
+    }
+
+    onChange(e) {
+        this.setState({ [e.target.name]: e.target.value });
+        console.log(e.target.value);
     }
 
     render() {
+        const { errors } = this.state;
+
+
+
+
         return (
             <div className="create-profile">
                 <div className="container">
@@ -37,6 +59,15 @@ class CreateProfile extends Component {
                                 Let's get some information to make your profile stand out
                             </p>
                             <small className="d-block pb-3">* = required fields</small>
+                            <form onSubmit={this.onSubmit}>
+                                <TextFieldGroup
+                                    placeholder="* Profile Handle"
+                                    value={this.state.handle}
+                                    onChange={this.onChange}
+                                    error={errors.handle}
+                                    info="A unique handle for your profile URL. Your full name, company name, nickname"
+                                />
+                            </form>
                         </div>
                     </div>
                 </div>
