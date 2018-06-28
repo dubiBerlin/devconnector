@@ -29,8 +29,8 @@ export const createProfile = (profileData, history) => dispatch => {
     axios
         .post("/api/profile", profileData)
         .then(res => history.push("./dashboard"))
-        .catch({
-            type: GET_ERRORS,
+        .catch(err => {
+            type: GET_ERRORS
             payload: err.response.data
         });
 }

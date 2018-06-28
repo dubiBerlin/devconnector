@@ -5,6 +5,7 @@ import TextFieldGroup from "../common/TextFieldGroup";
 import TextAreaFieldGroup from "../common/TextAreaFieldGroup";
 import InputGroup from "../common/InputGroup";
 import SelectListGroup from "../common/SelectListGroup";
+import { createProfile } from "../../actions/profileActions";
 
 class CreateProfile extends Component {
 
@@ -32,6 +33,14 @@ class CreateProfile extends Component {
         this.onSubmit = this.onSubmit.bind(this);
     }
 
+    // nextProps sind die neuen Properties
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.errors) {
+            this.setState({
+                errors: nextProps.errors
+            });
+        }
+    }
 
     onSubmit(e) {
         e.preventDefault();
@@ -213,4 +222,4 @@ const mapStateToProps = state => ({
     errors: state.errors
 })
 
-export default connect(null)(CreateProfile);
+export default connect(mapStateToProps, { createProfile })(CreateProfile);
