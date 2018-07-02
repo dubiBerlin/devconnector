@@ -6,6 +6,7 @@ import TextAreaFieldGroup from "../common/TextAreaFieldGroup";
 import InputGroup from "../common/InputGroup";
 import SelectListGroup from "../common/SelectListGroup";
 import { createProfile } from "../../actions/profileActions";
+import { withRouter } from "react-router-dom";
 
 class CreateProfile extends Component {
 
@@ -26,7 +27,7 @@ class CreateProfile extends Component {
             linkedin: "",
             youtube: "",
             instagram: "",
-            errors: ""
+            errors: {}
         }
 
         this.onChange = this.onChange.bind(this);
@@ -35,16 +36,31 @@ class CreateProfile extends Component {
 
     // nextProps sind die neuen Properties
     componentWillReceiveProps(nextProps) {
+        console.log(nextProps);
         if (nextProps.errors) {
-            this.setState({
-                errors: nextProps.errors
-            });
+            this.setState({ errors: nextProps.errors });
         }
     }
 
     onSubmit(e) {
         e.preventDefault();
-        console.log("Submit");
+        const profileData = {
+            handle: this.state.handle,
+            company: this.state.company,
+            website: this.state.website,
+            location: this.state.location,
+            status: this.state.status,
+            skills: this.state.skills,
+            githubusername: this.state.githubusername,
+            bio: this.state.bio,
+            twitter: this.state.twitter,
+            facebook: this.state.facebook,
+            linkedin: this.state.linkedin,
+            youtube: this.state.youtube,
+            instagram: this.state.instagram
+        }
+
+        this.props.createProfile(profileData, this.props.history)
     }
 
     onChange(e) {
@@ -194,11 +210,13 @@ class CreateProfile extends Component {
                                     info="Tell us little about yourself"
                                 />
                                 <div className="mb-3">
-                                    <button onClick={() => {
-                                        this.setState(prevState => ({
-                                            displaySocialInputs: !prevState.displaySocialInputs // toogled den state
-                                        }));
-                                    }} className="btn btn-light">Add Social Network Links</button>
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            this.setState(prevState => ({
+                                                displaySocialInputs: !prevState.displaySocialInputs // toogled den state
+                                            }));
+                                        }} className="btn btn-light">Add Social Network Links</button>
                                     <span className="text-muted">Optional</span>
                                 </div>
                                 {socialInputs}
@@ -212,14 +230,13 @@ class CreateProfile extends Component {
     }
 }
 
-CreateProfile.propTypes = {
+createProfile.propTypes = {
     profile: PropTypes.object.isRequired,
     errors: PropTypes.object.isRequired
-}
+};
 
 const mapStateToProps = state => ({
     profile: state.profile,
     errors: state.errors
-})
-
-export default connect(mapStateToProps, { createProfile })(CreateProfile);
+});
+export default connect(mapStateToProps, { createProfile })(withRouter(CreateProfile));

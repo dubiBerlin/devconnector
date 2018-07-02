@@ -51,7 +51,7 @@ router.get(
 // @desc   Create user profile
 // @access Private
 router.post(
-  "/createprofile",
+  "/",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     console.log(req.body);

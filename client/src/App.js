@@ -48,22 +48,26 @@ class App extends Component {
       <Provider store={store}>
         <Router>
           <div className="App">
-            < Navbar />
-            <Route exact path="/" component={Landing} />{/* exact hindert daran dass nicht zwei Komponenten gleichzeitig angezeigt werden */}
+            <Navbar />
+            <Route exact path="/" component={Landing} />
             <div className="container">
-              <Route exact path="/register" component={Register} />
+              <Route exact path="/register" component={Register} />{/* exact hindert daran dass nicht zwei Komponenten gleichzeitig angezeigt werden */}
               <Route exact path="/login" component={Login} />
               <Switch>
                 <PrivateRoute exact path="/dashboard" component={Dashboard} />
               </Switch>
               <Switch>
-                <PrivateRoute exact path="/create-profile" component={CreateProfile} />
+                <PrivateRoute
+                  exact
+                  path="/create-profile"
+                  component={CreateProfile}
+                />
               </Switch>
             </div>
             <Footer />
           </div>
         </Router>
-      </ Provider>
+      </Provider>
     );
   }
 }
