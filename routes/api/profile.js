@@ -36,7 +36,7 @@ router.get(
     })
       .populate("user", ["name", "avatar"]) // erstellt user objekt im profil welches zurück gegeben wird
       .then(profile => {
-        if (!Profile) {
+        if (!profile) {
           errors.noprofile = "There is no profile for this user";
           res.status(400).json(errors);
         }

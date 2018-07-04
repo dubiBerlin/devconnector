@@ -16,8 +16,10 @@ import { logoutUser, setCurrentUser } from './actions/authActions';
 import { clearCurrentProfile } from './actions/profileActions';
 import Dashboard from "./components/dashboard/Dashboard";
 import CreateProfile from "./components/create-profile/CreateProfile";
+import EditProfile from "./components/edit-profile/EditProfile";
 import setAuthToken from "./utils/setAuthtoken";
 import jwt_decode from "jwt-decode";
+import AddExperience from "./components/add-credentials/AddExperience";
 
 
 // Überprüfung ob token gesetzt wurde
@@ -61,6 +63,20 @@ class App extends Component {
                   exact
                   path="/create-profile"
                   component={CreateProfile}
+                />
+              </Switch>
+              <Switch>
+                <PrivateRoute
+                  exact
+                  path="/edit-profile"
+                  component={EditProfile}
+                />
+              </Switch>
+              <Switch>
+                <PrivateRoute
+                  exact
+                  path="/add-experience"
+                  component={AddExperience}
                 />
               </Switch>
             </div>
