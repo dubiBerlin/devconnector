@@ -20,6 +20,7 @@ import EditProfile from "./components/edit-profile/EditProfile";
 import setAuthToken from "./utils/setAuthtoken";
 import jwt_decode from "jwt-decode";
 import AddExperience from "./components/add-credentials/AddExperience";
+import AddEducation from "./components/add-credentials/AddEducation";
 
 
 // Überprüfung ob token gesetzt wurde
@@ -77,6 +78,13 @@ class App extends Component {
                   exact
                   path="/add-experience"
                   component={AddExperience}
+                />
+              </Switch>
+              <Switch>
+                <PrivateRoute
+                  exact
+                  path="/add-educaton"
+                  component={AddEducation}
                 />
               </Switch>
             </div>
