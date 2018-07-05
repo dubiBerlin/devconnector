@@ -40,6 +40,23 @@ export const createProfile = (profileData, history) => dispatch => {
 };
 
 // Add experience
+export const deleteExperience = function (id) {
+    return function (dispatch) {
+        axios.delete(`/api/profile/experience/${id}`)
+            .then(res =>
+                dispatch({
+                    type: GET_PROFILE,
+                    payload: res.data
+                }))
+            .catch(err =>
+                dispatch({
+                    type: GET_ERRORS,
+                    payload: err.response.data
+                })
+            );
+    };
+};
+// Add experience
 export const addExperience = function (expData, history) {
     return function (dispatch) {
         axios.post("api/profile/experience", expData)
