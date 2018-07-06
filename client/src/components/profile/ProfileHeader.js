@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { getProfiles } from "../../actions/profileActions";
 import { withRouter } from "react-router-dom";
-import isempty from "../../validation/is-empty";
+import isEmpty from "../../validation/is-empty";
 
 class ProfileHeader extends Component {
 
