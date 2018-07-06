@@ -21,6 +21,7 @@ import setAuthToken from "./utils/setAuthtoken";
 import jwt_decode from "jwt-decode";
 import AddExperience from "./components/add-credentials/AddExperience";
 import AddEducation from "./components/add-credentials/AddEducation";
+import Profiles from "./components/profiles/Profiles";
 
 
 // Überprüfung ob token gesetzt wurde
@@ -56,6 +57,7 @@ class App extends Component {
             <div className="container">
               <Route exact path="/register" component={Register} />{/* exact hindert daran dass nicht zwei Komponenten gleichzeitig angezeigt werden */}
               <Route exact path="/login" component={Login} />
+              <Route exact path="/profiles" component={Profiles} />
               <Switch>
                 <PrivateRoute exact path="/dashboard" component={Dashboard} />
               </Switch>

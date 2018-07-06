@@ -1,5 +1,6 @@
 
 import {
+    GET_PROFILES,
     GET_PROFILE,
     PROFILE_LOADING,
     CLEAR_CURRENT_PROFILE,
@@ -84,6 +85,45 @@ export const addEducation = function (expData, history) {
             );
     };
 };
+
+// Delete education
+export const deleteEducation = function (id) {
+    return function (dispatch) {
+        axios.delete(`/api/profile/education/${id}`)
+            .then(res =>
+                dispatch({
+                    type: GET_PROFILE,
+                    payload: res.data
+                }))
+            .catch(err =>
+                dispatch({
+                    type: GET_ERRORS,
+                    payload: err.response.data
+                })
+            );
+    };
+};
+
+// get all profiles
+export const getProfiles = function (id) {
+    return function (dispatch) {
+        dispatch(setProfileLoading());
+        axios.get(`/api/profile/all`)
+            .then(res =>
+                dispatch({
+                    type: GET_PROFILES,
+                    payload: res.data
+                }))
+            .catch(err =>
+                dispatch({
+                    type: GET_PROFILES,
+                    payload: err.response.data
+                })
+            );
+    };
+};
+
+
 
 // Delete account & profile
 export const deleteAccount = () => dispatch => {
