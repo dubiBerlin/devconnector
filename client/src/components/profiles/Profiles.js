@@ -59,7 +59,7 @@ Profiles.PropTypes = {
     profile: PropTypes.object.isRequired
 }
 
-const mapstateToProps = state => {
+const mapStateToProps = state => {
     profile: state.profile
 }
 

@@ -6,6 +6,9 @@ import { Link } from "react-router-dom";
 import { getProfiles } from "../../actions/profileActions";
 import { withRouter } from "react-router-dom";
 import Spinner from "../common/Spinner";
+import isEmpty from "../../validation/is-empty";
+import Profiles from "./Profiles";
+
 
 class ProfileItem extends Component {
     componentDidMount() {
@@ -16,11 +19,11 @@ class ProfileItem extends Component {
         const { profile, loading } = this.props;
         let profileItems;
 
-        if (profiles === null || loading) {
+        if (profile === null || loading) {
             profileItems = <Spinner />
         }
         else {
-            if (profiles.length > 0) {
+            if (profile.length > 0) {
                 profileItems = <h1>PROFILES HERE</h1>
             } else {
                 profileItems = <h4>No profiles found ...</h4>
@@ -67,11 +70,11 @@ class ProfileItem extends Component {
 }
 
 
-Profiles.PropTypes = {
+ProfileItem.propTypes = {
     profile: PropTypes.object.isRequired
 }
 
-const mapstateToProps = state => {
+const mapStateToProps = state => {
     profile: state.profile
 }
 

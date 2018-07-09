@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { getProfiles } from "../../actions/profileActions";
 import { withRouter } from "react-router-dom";
 
-class ProfileAbout extends Component {
+class ProfileGithub extends Component {
 
     constructor(props) {
         super(props);
@@ -76,4 +76,4 @@ ProfileGithub.propTypes = {
     username: PropTypes.string.isRequired
 }
 
-export default ProfileAbout;
+export default ProfileGithub;

@@ -49,14 +49,14 @@ class ProfileAbout extends Component {
             <div class="row">
                 <div class="col-md-6">
                     <h3 class="text-center text-info">Experience</h3>
-                    {expitems.length > 0 ? (
+                    {expItems.length > 0 ? (
                         <ul class="list-group">
                             {expItems}
                         </ul>) : (<p className="text-center">No experience Listed</p>)}
                 </div>
                 <div class="col-md-6">
                     <h3 class="text-center text-info">Education</h3>
-                    {eduitems.length > 0 ? (
+                    {eduItems.length > 0 ? (
                         <ul class="list-group">
                             {eduItems}
                         </ul>) : (<p className="text-center">No Education Listed</p>)}

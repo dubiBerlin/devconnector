@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { getProfiles } from "../../actions/profileActions";
 import { withRouter } from "react-router-dom";
 import isEmpty from "../../validation/is-empty";
+import ProfileGithub from "./ProfileGithub";
 
 class ProfileAbout extends Component {
 
