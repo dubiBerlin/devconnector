@@ -7,14 +7,23 @@ import { withRouter } from "react-router-dom";
 import isEmpty from "../../validation/is-empty";
 import PostForm from "./PostForm";
 import Spinner from "../common/Spinner";
+import { getPosts } from "../../actions/postActions";
 
 class Posts extends Component {
 
+    componentDidMount() {
+        this.props.getPosts();
+    }
 
     render() {
+        const { posts, loading } = this.props.post;
+        let postContent;
+        if (posts === null || loading) {
+            postContent = <Spinner />;
+        } else {
+            postContent = <PostFeed posts={posts} />
+        }
 
-
-        const { profile } = this.props;
 
         return (
             <div className="feed">
@@ -22,14 +31,22 @@ class Posts extends Component {
                     <div className="row">
                         <div className="col-md-12">
                             <PostForm />
+                            {postContent}
                         </div >
                     </div >
                 </div >
             </div >
         )
     }
-
-
 }
 
-export default Posts;
+Posts.propTypes = {
+    post: PropTypes.object.isRequired,
+    getPosts: PropTypes.func.isRequired
+}
+
+const mapStateToProps = state => ({
+    post: state.post
+});
+
+export default connect(mapStateToProps, { getPosts })(withRouter(Posts));
