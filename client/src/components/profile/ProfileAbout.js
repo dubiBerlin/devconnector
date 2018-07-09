@@ -39,8 +39,10 @@ class ProfileAbout extends Component {
             </div>
         )
     }
+}
 
-
+ProfileGithub.propTypes = {
+    profile: PropTypes.object.isRequired
 }
 
 export default ProfileAbout;
