@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { withRouter } from "react-router-dom";
 import isEmpty from "../../validation/is-empty";
 import PostForm from "./PostForm";
+import PostFeed from "./PostFeed"
 import Spinner from "../common/Spinner";
 import { getPosts } from "../../actions/postActions";
 

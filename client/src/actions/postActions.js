@@ -25,8 +25,24 @@ export const addPost = postdata => dispatch => {
         );
 };
 
+// Delete post
+export const deletePost = id => dispatch => {
+    axios.delete(`/api/posts/${id}`)
+        .then(res =>
+            dispatch({
+                type: DELETE_POST,
+                payload: id
+            }))
+        .catch(err =>
+            dispatch({
+                type: GET_ERRORS,
+                payload: err.response.data
+            })
+        );
+};
 
-// Add post
+
+// Get post
 export const getPosts = () => dispatch => {
     dispatch(setPostLoading());
     axios.post("/api/posts")
@@ -42,6 +58,34 @@ export const getPosts = () => dispatch => {
             })
         );
 };
+
+// Add like
+export const addLike = id => dispatch => {
+    axios.post(`/api/posts/like/${id}`)
+        .then(res =>
+            dispatch(getPosts())) // nach dem löschen des likes einfach wieder alle posts abrufen
+        .catch(err =>
+            dispatch({
+                type: GET_ERRORS,
+                payload: err.response.data
+            })
+        );
+};
+
+
+// remove like
+export const removeLike = id => dispatch => {
+    axios.delete(`/api/posts/unlike/${id}`)
+        .then(res =>
+            dispatch(getPosts())) // nach dem löschen des likes einfach wieder alle posts abrufen
+        .catch(err =>
+            dispatch({
+                type: GET_ERRORS,
+                payload: err.response.data
+            })
+        );
+};
+
 
 
 export const setPostLoading = () => {
