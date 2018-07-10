@@ -5,12 +5,14 @@ import {
     GET_POST,
     ADD_POST,
     DELETE_POST,
-    GET_ERRORS
+    GET_ERRORS,
+    CLEAR_ERRORS
 } from './types';
 import axios from "axios";
 
 // Add post
 export const addPost = postdata => dispatch => {
+    dispatch(clearErrors());
     axios.post("/api/posts", postdata)
         .then(res =>
             dispatch({
@@ -111,13 +113,37 @@ export const setPostLoading = () => {
     }
 }
 
+export const clearErrors = () => {
+    return {
+        type: CLEAR_ERRORS
+    }
+}
+
 
 // Add comment
 export const addcomment = (postId, commentData) => dispatch => {
+    dispatch(clearErrors());
     axios.post(`/api/posts/comment/${postId}`, commentData)
         .then(res =>
             dispatch({
                 type: ADD_POST,
+                payload: res.data
+            }))
+        .catch(err =>
+            dispatch({
+                type: GET_ERRORS,
+                payload: err.response.data
+            })
+        );
+};
+
+
+// Delete post
+export const deleteComment = (postId, commentId) => dispatch => {
+    axios.delete(`/api/posts/comment/${postId}/${commentId}`)
+        .then(res =>
+            dispatch({
+                type: GET_POST,
                 payload: res.data
             }))
         .catch(err =>
